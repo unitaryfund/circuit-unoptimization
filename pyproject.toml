@@ -10,6 +10,8 @@ python = ">=3.12,<3.13"
 qiskit = "^1.2.4"
 numpy = ">=1.22,<2.0"
 mitiq = "^0.40.0"
+jupyter = "^1.1.1"
+matplotlib = "^3.9.2"
 
 [build-system]
 requires = ["poetry-core"]

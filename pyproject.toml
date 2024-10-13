@@ -12,6 +12,7 @@ numpy = ">=1.22,<2.0"
 mitiq = "^0.40.0"
 jupyter = "^1.1.1"
 matplotlib = "^3.9.2"
+pylatexenc = "^2.10"
 
 [build-system]
 requires = ["poetry-core"]

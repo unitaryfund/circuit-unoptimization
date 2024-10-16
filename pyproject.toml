@@ -14,6 +14,7 @@ jupyter = "^1.1.1"
 matplotlib = "^3.9.2"
 pylatexenc = "^2.10"
 ply = "^3.11"
+qiskit-aer = "^0.15.1"
 
 [build-system]
 requires = ["poetry-core"]

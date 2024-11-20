@@ -12,4 +12,11 @@ poetry install
 poetry shell
 ```
 
+## Testing
+
+To run the tests:
+
+```
+poetry run pytest
+```
 

@@ -238,10 +238,10 @@ def decompose_circuit(qc: QuantumCircuit) -> QuantumCircuit:
     Returns:
         new_qc: The decomposed quantum circuit.
     """
-    return PassManager(Decompose()).run(qc)
+    return qc.decompose()
 
 
-def synthesize_circuit(qc: QuantumCircuit, optimization_level: int = 0) -> QuantumCircuit:
+def synthesize_circuit(qc: QuantumCircuit, optimization_level: int = 3) -> QuantumCircuit:
     """Synthesize the circuit using a specified optimization level.
 
     Args:
@@ -251,4 +251,4 @@ def synthesize_circuit(qc: QuantumCircuit, optimization_level: int = 0) -> Quant
     Returns:
         new_qc: The synthesized quantum circuit.
     """
-    return transpile(qc, optimization_level=optimization_level, basis_gates=["u1", "u2", "u3", "cx"])
+    return transpile(qc, optimization_level=optimization_level, basis_gates=["u3", "cx"])

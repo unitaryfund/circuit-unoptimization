@@ -1,3 +1,4 @@
+"""Tests for the components of the elementary recipe (ER)."""
 from qiskit.quantum_info import Operator
 from unopt.recipe import (
     gate_insert,

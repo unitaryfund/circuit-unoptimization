@@ -1,3 +1,4 @@
+"""Common fixtures for tests."""
 import pytest
 from unopt.circuits import random_two_qubit_circuit
 

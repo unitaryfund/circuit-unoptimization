@@ -1,4 +1,5 @@
-"""Recipe steps from arXiv:X"""
+"""Recipe steps from arXiv:2311.03805"""
+from typing import Any
 import random
 import warnings
 
@@ -8,11 +9,9 @@ from qiskit.circuit.library import UnitaryGate
 
 from qiskit import QuantumCircuit, transpile
 from qiskit.quantum_info import random_unitary, Operator
-from qiskit.transpiler.passes import Decompose
-from qiskit.transpiler import PassManager
 
 
-def elementary_recipe(qc: QuantumCircuit, iterations=1, strategy="P_c"):
+def elementary_recipe(qc: QuantumCircuit, iterations: int = 1, strategy: str = "P_c") -> QuantumCircuit:
     """Apply the elementary recipe to a quantum circuit multiple times.
 
     Args:
@@ -25,22 +24,22 @@ def elementary_recipe(qc: QuantumCircuit, iterations=1, strategy="P_c"):
     """
     new_qc = qc.copy()
     for _ in range(iterations):
-        # Step 1: Gate Insertion
+        # Step 1: Gate Insertion:
         new_qc, B1_info = gate_insert(new_qc, strategy)
 
-        # Step 2: Gate Swapping
+        # Step 2: Gate Swapping:
         new_qc = gate_swap(new_qc, B1_info)
 
-        # Step 3: Decomposition
+        # Step 3: Decomposition:
         new_qc = decompose_circuit(new_qc)
 
-        # Step 4: Synthesis
+        # Step 4: Synthesis:
         new_qc = synthesize_circuit(new_qc)
 
     return new_qc
 
 
-def gate_insert(qc: QuantumCircuit, strategy="P_c"):
+def gate_insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
     """Insert a two-qubit gate A and its Hermitian conjugate A† between two gates B1 and B2.
     Args:
         qc: The input quantum circuit.
@@ -51,7 +50,7 @@ def gate_insert(qc: QuantumCircuit, strategy="P_c"):
         B1_info: Information about gate B1 (index, qubits, gate).
     """
     # Collect all two-qubit gates with their indices and qubits
-    two_qubit_gates = []
+    two_qubit_gates: list[QuantumCircuit] = []
 
     for idx, instruction in enumerate(qc.data):
         instr = instruction.operation
@@ -156,7 +155,7 @@ def gate_insert(qc: QuantumCircuit, strategy="P_c"):
     return new_qc, B1_info
 
 
-def gate_swap(qc: QuantumCircuit, B1_info: dict) -> QuantumCircuit:
+def gate_swap(qc: QuantumCircuit, B1_info: dict[str, Any]) -> QuantumCircuit:
     r"""Swap the B1 gate with the A† gate in the circuit, replacing A† with \widetilde{A^\dagger}.
     Args:
         qc: The input quantum circuit.

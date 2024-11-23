@@ -1646,13 +1646,13 @@ files = [
 
 [[package]]
 name = "mitiq"
-version = "0.40.0"
+version = "0.41.0"
 description = "Mitiq is an open source toolkit for implementing error mitigation techniques on most current intermediate-scale quantum computers."
 optional = false
 python-versions = "<3.13,>=3.10"
 files = [
-    {file = "mitiq-0.40.0-py3-none-any.whl", hash = "sha256:4981feeeea076a2ea77ec336f4f9c82226c69f53d61f97e10fc0220a917a8f17"},
-    {file = "mitiq-0.40.0.tar.gz", hash = "sha256:1783d79939d5f8724fd4fb35126ba1286e199f08db10eb361b30e8d7d838e974"},
+    {file = "mitiq-0.41.0-py3-none-any.whl", hash = "sha256:94c99381aabb2888c9650f5f68366400daf1292993f11150ee9cfea701ec8854"},
+    {file = "mitiq-0.41.0.tar.gz", hash = "sha256:1d06d16e2e93f55321b9c54623ac48fa3276dbfae978a0d77767d7b5a59112da"},
 ]
 
 [package.dependencies]
@@ -1664,11 +1664,11 @@ tabulate = "*"
 [package.extras]
 braket = ["amazon-braket-sdk (>=1.69.0,<1.70.0)", "cirq-ionq (>=1.4.0,<1.5.0)"]
 cirq = ["cirq-core (>=1.4.0,<1.5.0)"]
-development = ["Sphinx (==8.0.2)", "amazon-braket-sdk (>=1.69.0,<1.70.0)", "bqskit (==1.1.1)", "cirq-core (>=1.4.0,<1.5.0)", "cirq-ionq (>=1.4.0,<1.5.0)", "cirq-rigetti (>=1.4.0,<1.5.0)", "jupytext (==1.16.1)", "matplotlib (==3.8.1)", "mypy (==1.0.0)", "myst-nb (==1.1.1)", "myst-parser (==4.0.0)", "nbsphinx (==0.9.3)", "openfermion (==1.6.1)", "openfermionpyscf (==0.5)", "pandas (==2.1.3)", "pennylane (>=0.36.0,<0.37.0)", "pennylane-qiskit (>=0.36.0,<0.37.0)", "ply (==3.11)", "pydata-sphinx-theme (==0.15.4)", "pyqrack (==1.30.30)", "pyquil (>=3.5.4,<3.6.0)", "pyscf (==2.7.0)", "pytest (==8.0.0)", "pytest-cov (==5.0.0)", "pytest-xdist[psutil] (==3.0.2)", "qibo (==0.2.12)", "qiskit (>=1.2.2,<1.3.0)", "qiskit-aer (>=0.15.1,<0.16.0)", "qiskit-ibm-runtime (>=0.20.0,<0.21.0)", "ruff (==0.3.1)", "seaborn (==0.13.0)", "sphinx-autodoc-typehints (==2.0.0)", "sphinx-copybutton (==0.5.2)", "sphinx-design (==0.6.1)", "sphinx-gallery (==0.15.0)", "sphinx-tags (==0.4)", "sphinxcontrib-bibtex (==2.6.2)", "stim (==1.13.0)", "stimcirq (==1.13.0)", "types-tabulate"]
+development = ["Sphinx (==8.0.2)", "amazon-braket-sdk (>=1.69.0,<1.70.0)", "bqskit (==1.1.1)", "cirq-core (>=1.4.0,<1.5.0)", "cirq-ionq (>=1.4.0,<1.5.0)", "cirq-rigetti (>=1.4.0,<1.5.0)", "jupytext (==1.16.1)", "matplotlib (==3.8.1)", "mypy (==1.0.0)", "myst-nb (==1.1.1)", "myst-parser (==4.0.0)", "nbsphinx (==0.9.3)", "openfermion (==1.6.1)", "openfermionpyscf (==0.5)", "pandas (==2.1.3)", "pennylane (>=0.36.0,<0.37.0)", "pennylane-qiskit (>=0.36.0,<0.37.0)", "ply (==3.11)", "pydata-sphinx-theme (==0.15.4)", "pyqrack (==1.32.11)", "pyquil (>=3.5.4,<3.6.0)", "pyscf (==2.7.0)", "pytest (==8.0.0)", "pytest-cov (==6.0.0)", "pytest-xdist[psutil] (==3.0.2)", "qibo (>=0.2.7,<0.3.0)", "qiskit (>=1.2.4,<1.3.0)", "qiskit-aer (>=0.15.1,<0.16.0)", "qiskit-ibm-runtime (>=0.20.0,<0.21.0)", "ruff (==0.3.1)", "seaborn (==0.13.0)", "sphinx-autodoc-typehints (==2.0.0)", "sphinx-copybutton (==0.5.2)", "sphinx-design (==0.6.1)", "sphinx-gallery (==0.15.0)", "sphinx-tags (==0.4)", "sphinxcontrib-bibtex (==2.6.2)", "stim (==1.14.0)", "stimcirq (==1.14.0)", "types-tabulate"]
 pennylane = ["pennylane (>=0.36.0,<0.37.0)", "pennylane-qiskit (>=0.36.0,<0.37.0)"]
 pyquil = ["cirq-rigetti (>=1.4.0,<1.5.0)", "pyquil (>=3.5.4,<3.6.0)"]
-qibo = ["qibo (==0.2.12)"]
-qiskit = ["ply (==3.11)", "qiskit (>=1.2.2,<1.3.0)", "qiskit-aer (>=0.15.1,<0.16.0)", "qiskit-ibm-runtime (>=0.20.0,<0.21.0)"]
+qibo = ["qibo (>=0.2.7,<0.3.0)"]
+qiskit = ["ply (==3.11)", "qiskit (>=1.2.4,<1.3.0)", "qiskit-aer (>=0.15.1,<0.16.0)", "qiskit-ibm-runtime (>=0.20.0,<0.21.0)"]
 
 [[package]]
 name = "mpmath"
@@ -3470,4 +3470,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<3.13"
-content-hash = "76fcf2f2b8b2a91b7070a69f11443a17372b6d27554f462fd78facac2fe19f67"
+content-hash = "ffb0131e5c8639b1effcdbe3acb4016bc4bbfa007b4b07ba7c0a8688881454cf"

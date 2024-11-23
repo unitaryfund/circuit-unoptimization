@@ -6,9 +6,7 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import random_unitary
 
 
-def generate_random_two_qubit_gate_circuit(
-    num_qubits: int, depth: int
-) -> QuantumCircuit:
+def generate_random_two_qubit_gate_circuit(num_qubits: int, depth: int) -> QuantumCircuit:
     """Generate a random quantum circuit consisting of two-qubit gates.
 
     Args:

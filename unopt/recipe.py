@@ -12,9 +12,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.quantum_info import random_unitary, Operator
 
 
-def elementary_recipe(
-    qc: QuantumCircuit, iterations: int = 1, strategy: str = "P_c"
-) -> QuantumCircuit:
+def elementary_recipe(qc: QuantumCircuit, iterations: int = 1, strategy: str = "P_c") -> QuantumCircuit:
     """Apply the elementary recipe to a quantum circuit multiple times.
 
     Args:
@@ -62,9 +60,7 @@ def insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
 
         if len(qargs) == 2:
             qubit_indices = [qc.find_bit(qarg).index for qarg in qargs]
-            two_qubit_gates.append(
-                {"index": idx, "qubits": qubit_indices, "gate": instr}
-            )
+            two_qubit_gates.append({"index": idx, "qubits": qubit_indices, "gate": instr})
 
     found_pair = False
     B1_idx = B1_qubits = B1_gate = shared_qubit = None
@@ -98,14 +94,10 @@ def insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
             shared_qubit = B1_qubits[0]  # Choose the first qubit as shared
             found_pair = True
     else:
-        raise ValueError(
-            f"Unknown strategy '{strategy}'. Available strategies are 'P_c' and 'P_r'."
-        )
+        raise ValueError(f"Unknown strategy '{strategy}'. Available strategies are 'P_c' and 'P_r'.")
 
     if not found_pair:
-        warnings.warn(
-            "No suitable pair of two-qubit gates found. Skipping gate insertion."
-        )
+        warnings.warn("No suitable pair of two-qubit gates found. Skipping gate insertion.")
         return qc, None  # Return the original circuit unmodified
 
     # Generate a random two-qubit unitary A and its adjoint A†
@@ -204,22 +196,16 @@ def swap(qc: QuantumCircuit, B1_info: dict[str, Any]) -> QuantumCircuit:
     A_dagger_operator_full = Operator(np.eye(2**num_qubits_involved))
     A_dagger_qubits = [shared_qubit, third_qubit]
     A_dagger_qubit_positions = [qubit_positions[q] for q in A_dagger_qubits]
-    A_dagger_operator_full = A_dagger_operator_full.compose(
-        A_dagger_operator, qargs=A_dagger_qubit_positions
-    )
+    A_dagger_operator_full = A_dagger_operator_full.compose(A_dagger_operator, qargs=A_dagger_qubit_positions)
 
     # Compute B1_operator_full_dagger
     B1_operator_full_dagger = B1_operator_full.adjoint()
 
     # Compute \widetilde{A^\dagger}
-    widetilde_A_dagger_operator = B1_operator_full_dagger.dot(
-        A_dagger_operator_full
-    ).dot(B1_operator_full)
+    widetilde_A_dagger_operator = B1_operator_full_dagger.dot(A_dagger_operator_full).dot(B1_operator_full)
 
     # Create UnitaryGate from \widetilde{A^\dagger}
-    widetilde_A_dagger_gate = UnitaryGate(
-        widetilde_A_dagger_operator.data, label=r"$\widetilde{A^{\dagger}}$"
-    )
+    widetilde_A_dagger_gate = UnitaryGate(widetilde_A_dagger_operator.data, label=r"$\widetilde{A^{\dagger}}$")
 
     # Create a new quantum circuit
     new_qc = QuantumCircuit(*qc.qregs, *qc.cregs)
@@ -265,6 +251,4 @@ def synthesize(qc: QuantumCircuit, optimization_level: int = 3) -> QuantumCircui
     Returns:
         new_qc: The synthesized quantum circuit.
     """
-    return transpile(
-        qc, optimization_level=optimization_level, basis_gates=["u3", "cx"]
-    )
+    return transpile(qc, optimization_level=optimization_level, basis_gates=["u3", "cx"])

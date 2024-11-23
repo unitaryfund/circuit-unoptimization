@@ -16,7 +16,14 @@ poetry shell
 
 To run the tests:
 
-```
+```sh
 poetry run pytest
 ```
 
+## Contributing
+
+To guarantee that both linter and formatter run before each commit, please install the pre-commit hook with
+
+```sh
+poetry run pre-commit install
+```

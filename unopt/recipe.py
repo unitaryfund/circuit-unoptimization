@@ -1,4 +1,5 @@
 """Recipe steps from arXiv:2311.03805"""
+
 from typing import Any
 import random
 import warnings
@@ -11,7 +12,9 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.quantum_info import random_unitary, Operator
 
 
-def elementary_recipe(qc: QuantumCircuit, iterations: int = 1, strategy: str = "P_c") -> QuantumCircuit:
+def elementary_recipe(
+    qc: QuantumCircuit, iterations: int = 1, strategy: str = "P_c"
+) -> QuantumCircuit:
     """Apply the elementary recipe to a quantum circuit multiple times.
 
     Args:
@@ -25,21 +28,21 @@ def elementary_recipe(qc: QuantumCircuit, iterations: int = 1, strategy: str = "
     new_qc = qc.copy()
     for _ in range(iterations):
         # Step 1: Gate Insertion:
-        new_qc, B1_info = gate_insert(new_qc, strategy)
+        new_qc, B1_info = insert(new_qc, strategy)
 
         # Step 2: Gate Swapping:
-        new_qc = gate_swap(new_qc, B1_info)
+        new_qc = swap(new_qc, B1_info)
 
         # Step 3: Decomposition:
-        new_qc = decompose_circuit(new_qc)
+        new_qc = decompose(new_qc)
 
         # Step 4: Synthesis:
-        new_qc = synthesize_circuit(new_qc)
+        new_qc = synthesize(new_qc)
 
     return new_qc
 
 
-def gate_insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
+def insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
     """Insert a two-qubit gate A and its Hermitian conjugate A† between two gates B1 and B2.
     Args:
         qc: The input quantum circuit.
@@ -59,10 +62,12 @@ def gate_insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
 
         if len(qargs) == 2:
             qubit_indices = [qc.find_bit(qarg).index for qarg in qargs]
-            two_qubit_gates.append({"index": idx, "qubits": qubit_indices, "gate": instr})
+            two_qubit_gates.append(
+                {"index": idx, "qubits": qubit_indices, "gate": instr}
+            )
 
     found_pair = False
-    B1_idx = B1_qubits = B1_gate = shared_qubit = None 
+    B1_idx = B1_qubits = B1_gate = shared_qubit = None
 
     if strategy == "P_c":
         # Strategy P_c: Find a pair of gates that share a common qubit
@@ -71,7 +76,7 @@ def gate_insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
                 qubits_i = set(two_qubit_gates[i]["qubits"])
                 qubits_j = set(two_qubit_gates[j]["qubits"])
                 common_qubits = qubits_i & qubits_j
-                
+
                 if len(common_qubits) == 1:
                     B1_idx = two_qubit_gates[i]["index"]
                     B1_qubits = two_qubit_gates[i]["qubits"]
@@ -93,10 +98,14 @@ def gate_insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
             shared_qubit = B1_qubits[0]  # Choose the first qubit as shared
             found_pair = True
     else:
-        raise ValueError(f"Unknown strategy '{strategy}'. Available strategies are 'P_c' and 'P_r'.")
+        raise ValueError(
+            f"Unknown strategy '{strategy}'. Available strategies are 'P_c' and 'P_r'."
+        )
 
     if not found_pair:
-        warnings.warn("No suitable pair of two-qubit gates found. Skipping gate insertion.")
+        warnings.warn(
+            "No suitable pair of two-qubit gates found. Skipping gate insertion."
+        )
         return qc, None  # Return the original circuit unmodified
 
     # Generate a random two-qubit unitary A and its adjoint A†
@@ -155,7 +164,7 @@ def gate_insert(qc: QuantumCircuit, strategy: str = "P_c") -> QuantumCircuit:
     return new_qc, B1_info
 
 
-def gate_swap(qc: QuantumCircuit, B1_info: dict[str, Any]) -> QuantumCircuit:
+def swap(qc: QuantumCircuit, B1_info: dict[str, Any]) -> QuantumCircuit:
     r"""Swap the B1 gate with the A† gate in the circuit, replacing A† with \widetilde{A^\dagger}.
     Args:
         qc: The input quantum circuit.
@@ -169,7 +178,7 @@ def gate_swap(qc: QuantumCircuit, B1_info: dict[str, Any]) -> QuantumCircuit:
     A = B1_info["A"]
     shared_qubit = B1_info["shared_qubit"]
     third_qubit = B1_info["third_qubit"]
-    
+
     # Map qubit indices to qubit objects
     qubit_map = {qc.find_bit(q).index: q for q in qc.qubits}
 
@@ -187,24 +196,30 @@ def gate_swap(qc: QuantumCircuit, B1_info: dict[str, Any]) -> QuantumCircuit:
     qubit_positions = {q: idx for idx, q in enumerate(qubits_involved)}
 
     # Build B1_operator_full
-    B1_operator_full = Operator(np.eye(2 ** num_qubits_involved))
+    B1_operator_full = Operator(np.eye(2**num_qubits_involved))
     B1_qubit_positions = [qubit_positions[q] for q in B1_qubits]
     B1_operator_full = B1_operator_full.compose(B1_operator, qargs=B1_qubit_positions)
 
     # Build A_dagger_operator_full
-    A_dagger_operator_full = Operator(np.eye(2 ** num_qubits_involved))
+    A_dagger_operator_full = Operator(np.eye(2**num_qubits_involved))
     A_dagger_qubits = [shared_qubit, third_qubit]
     A_dagger_qubit_positions = [qubit_positions[q] for q in A_dagger_qubits]
-    A_dagger_operator_full = A_dagger_operator_full.compose(A_dagger_operator, qargs=A_dagger_qubit_positions)
+    A_dagger_operator_full = A_dagger_operator_full.compose(
+        A_dagger_operator, qargs=A_dagger_qubit_positions
+    )
 
     # Compute B1_operator_full_dagger
     B1_operator_full_dagger = B1_operator_full.adjoint()
 
     # Compute \widetilde{A^\dagger}
-    widetilde_A_dagger_operator = B1_operator_full_dagger.dot(A_dagger_operator_full).dot(B1_operator_full)
+    widetilde_A_dagger_operator = B1_operator_full_dagger.dot(
+        A_dagger_operator_full
+    ).dot(B1_operator_full)
 
     # Create UnitaryGate from \widetilde{A^\dagger}
-    widetilde_A_dagger_gate = UnitaryGate(widetilde_A_dagger_operator.data, label=r"$\widetilde{A^{\dagger}}$")
+    widetilde_A_dagger_gate = UnitaryGate(
+        widetilde_A_dagger_operator.data, label=r"$\widetilde{A^{\dagger}}$"
+    )
 
     # Create a new quantum circuit
     new_qc = QuantumCircuit(*qc.qregs, *qc.cregs)
@@ -228,7 +243,7 @@ def gate_swap(qc: QuantumCircuit, B1_info: dict[str, Any]) -> QuantumCircuit:
     return new_qc
 
 
-def decompose_circuit(qc: QuantumCircuit) -> QuantumCircuit:
+def decompose(qc: QuantumCircuit) -> QuantumCircuit:
     """Decompose multi-qubit unitary gates into elementary gates.
 
     Args:
@@ -240,7 +255,7 @@ def decompose_circuit(qc: QuantumCircuit) -> QuantumCircuit:
     return qc.decompose()
 
 
-def synthesize_circuit(qc: QuantumCircuit, optimization_level: int = 3) -> QuantumCircuit:
+def synthesize(qc: QuantumCircuit, optimization_level: int = 3) -> QuantumCircuit:
     """Synthesize the circuit using a specified optimization level.
 
     Args:
@@ -250,4 +265,6 @@ def synthesize_circuit(qc: QuantumCircuit, optimization_level: int = 3) -> Quant
     Returns:
         new_qc: The synthesized quantum circuit.
     """
-    return transpile(qc, optimization_level=optimization_level, basis_gates=["u3", "cx"])
+    return transpile(
+        qc, optimization_level=optimization_level, basis_gates=["u3", "cx"]
+    )

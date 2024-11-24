@@ -1,10 +1,10 @@
-from qiskit_aer import AerSimulator
-from qiskit_aer.noise import NoiseModel
-
-from qiskit import QuantumCircuit, transpile
-from qiskit.providers import Backend
+"""Quantum error mitigation with unoptimized circuits."""
 
 from mitiq import zne
+from qiskit import QuantumCircuit, transpile
+from qiskit.providers import Backend
+from qiskit_aer import AerSimulator
+from qiskit_aer.noise import NoiseModel
 
 from unopt.generator import generate_random_two_qubit_gate_circuit
 from unopt.noise_models import depolarizing_noise_model
@@ -29,16 +29,14 @@ def execute(
     )
 
     # Execute the circuit:
-    result = backend.run(
-        compiled_circuit, noise_model=noise_model, shots=shots
-    ).result()
+    result = backend.run(compiled_circuit, noise_model=noise_model, shots=shots).result()
     counts = result.get_counts()
 
-    # Calculate expectation value of Z on qubit 0
+    # Calculate expectation value of Z on qubit 0.
     total_counts = sum(counts.values())
     expectation = 0.0
     for outcome, count in counts.items():
-        # Reverse the outcome string due to Qiskit's little-endian ordering
+        # Reverse the outcome string due to Qiskit's little-endian ordering.
         bitstring = outcome[::-1]
         if bitstring[0] == "0":
             expectation += count / total_counts

@@ -21,9 +21,19 @@ pre-commit = "^4.0.1"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 ruff = "^0.8.0"
+mypy = "^1.13.0"
+pytest-mypy-plugins = "^3.1.2"
 
 [tool.ruff]
 line-length = 120
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true  # Avoid errors for missing stubs for some libraries
+check_untyped_defs = true      # Warn about untyped function definitions
+disallow_untyped_calls = true  # Disallow calling functions without type hints
+disallow_untyped_defs = true   # Disallow functions without type hints
+show_error_codes = true        # Show error codes in output
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,9 +1,7 @@
 """Generate quantum circuits for testing purposes."""
 
-import random
-
 from qiskit import QuantumCircuit
-from qiskit.quantum_info import random_unitary
+import random
 
 
 def generate_random_two_qubit_gate_circuit(num_qubits: int, depth: int) -> QuantumCircuit:
@@ -11,26 +9,30 @@ def generate_random_two_qubit_gate_circuit(num_qubits: int, depth: int) -> Quant
 
     Args:
         num_qubits: The number of qubits in the circuit.
-        depth: The number of layers (depth) of two-qubit gates.
+        depth: The target depth of the circuit.
 
     Returns:
         The generated random circuit.
     """
-    circuit = QuantumCircuit(num_qubits)
-    qubit_index = list(range(num_qubits))
+    qc = QuantumCircuit(num_qubits)
 
     for _ in range(depth):
-        # Shuffle qubits for randomness.
-        random.shuffle(qubit_index)
+        used_pairs = set()
+        for _ in range(num_qubits // 2):
+            # Select a pair of qubits that hasn't been used in this layer
+            while True:
+                qubit1, qubit2 = random.sample(range(num_qubits), 2)
+                if (qubit1, qubit2) not in used_pairs and (qubit2, qubit1) not in used_pairs:
+                    used_pairs.add((qubit1, qubit2))
+                    break
 
-        for k in range(num_qubits // 2):
-            # Select pairs of qubits.
-            targets = [qubit_index[2 * k], qubit_index[2 * k + 1]]
+            # Randomly choose a two-qubit gate
+            gate = random.choice(["cx", "cz", "swap"])
+            if gate == "cx":
+                qc.cx(qubit1, qubit2)
+            elif gate == "cz":
+                qc.cz(qubit1, qubit2)
+            elif gate == "swap":
+                qc.swap(qubit1, qubit2)
 
-            # Generate a random 2-qubit unitary.
-            random_unitary_gate = random_unitary(4).to_instruction()
-
-            # Add the random unitary to the circuit.
-            circuit.append(random_unitary_gate, targets)
-
-    return circuit
+    return qc

@@ -19,14 +19,14 @@ def generate_random_two_qubit_gate_circuit(num_qubits: int, depth: int) -> Quant
     for _ in range(depth):
         used_pairs = set()
         for _ in range(num_qubits // 2):
-            # Select a pair of qubits that hasn't been used in this layer
+            # Select a pair of qubits that hasn't been used in this layer.
             while True:
                 qubit1, qubit2 = random.sample(range(num_qubits), 2)
                 if (qubit1, qubit2) not in used_pairs and (qubit2, qubit1) not in used_pairs:
                     used_pairs.add((qubit1, qubit2))
                     break
 
-            # Randomly choose a two-qubit gate
+            # Randomly choose a two-qubit gate.
             gate = random.choice(["cx", "cz", "swap"])
             if gate == "cx":
                 qc.cx(qubit1, qubit2)

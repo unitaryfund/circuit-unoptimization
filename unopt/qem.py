@@ -54,8 +54,7 @@ def bench(
         print(f"Noise-scaled expectation values from {fold_method.__name__}: \n {folded_values}")
 
         factory = extrapolation_method(scale_factors_zne)
-        for s, val in zip(scale_factors_zne, folded_values):
-            factory.push({"scale_factor": s}, val)
+        [factory.push({"scale_factor": s}, val) for s, val in zip(scale_factors_zne, folded_values)]
 
         zne_fold_value = factory.reduce()
         print(f"The {extrapolation_method.__name__} zero-noise extrapolation is: {zne_fold_value}")
@@ -72,8 +71,7 @@ def bench(
         print(f"Noise-scaled expectation values from circuit unoptimization: \n {unoptimized_values}")
 
         factory = extrapolation_method(scale_factors_unopt)
-        for s, val in zip(scale_factors_unopt, unoptimized_values):
-            factory.push({"scale_factor": s}, val)
+        [factory.push({"scale_factor": s}, val) for s, val in zip(scale_factors_unopt, unoptimized_values)]
 
         zne_unopt_value = factory.reduce()
         zne_unopt_error = abs(ideal_value - zne_unopt_value)

@@ -4,7 +4,7 @@ import pytest
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Operator
 
-from unopt.generator import generate_random_two_qubit_gate_circuit
+from unopt.circuit import generate_random_two_qubit_gate_circuit
 from unopt.recipe import decompose, elementary_recipe
 
 

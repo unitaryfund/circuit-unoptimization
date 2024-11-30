@@ -2,7 +2,7 @@
 
 import pytest
 
-from unopt.generator import generate_random_two_qubit_gate_circuit
+from unopt.circuit import generate_random_two_qubit_gate_circuit
 
 
 @pytest.mark.parametrize(

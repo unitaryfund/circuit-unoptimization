@@ -11,7 +11,7 @@ from qiskit_aer.noise import NoiseModel
 
 from mitiq import zne
 
-from unopt.noise_models import depolarizing_noise_model
+from unopt.noise import depolarizing_noise_model
 from unopt.recipe import elementary_recipe
 from unopt.qem import execute_no_shot_noise, execute
 

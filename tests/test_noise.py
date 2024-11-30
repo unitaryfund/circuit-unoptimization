@@ -5,7 +5,7 @@ from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 from qiskit_aer.noise import NoiseModel
 
-from unopt.noise_models import amplitude_damping_noise_model, depolarizing_noise_model
+from unopt.noise import amplitude_damping_noise_model, depolarizing_noise_model
 
 
 @pytest.mark.parametrize(

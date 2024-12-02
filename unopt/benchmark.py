@@ -18,18 +18,18 @@ from unopt.qem import execute_no_shot_noise, execute
 
 @dataclass
 class BenchResults:
-    ideal_value: float
-    unmit_value: float
-    unmit_error: float
-    zne_fold_value: float
-    zne_fold_error: float
-    zne_unopt_value: float
-    zne_unopt_error: float
+    avg_ideal_value: float
+    avg_unmit_value: float
+    avg_unmit_error: float
+    avg_zne_fold_value: float
+    avg_zne_fold_error: float
+    avg_zne_unopt_value: float
+    avg_zne_unopt_error: float
     percent_improvement_unmit: float
     percent_improvement_zne_fold: float
     original_circuit_depth: int
-    zne_fold_circuit_depths: list[int]
-    zne_unopt_circuit_depths: list[int]
+    avg_zne_fold_circuit_depths: list[int]
+    avg_zne_unopt_circuit_depths: list[int]
 
 
 def bench(
@@ -41,88 +41,90 @@ def bench(
     iterations_unopt: list[int] = [1, 2, 3],
     fold_method: Callable = zne.scaling.fold_global,
     extrapolation_method: Callable = zne.RichardsonFactory,
+    trials: int = 1,
     verbose: bool = False,
 ) -> BenchResults:
     """Calculate ideal, unmitigated, ZNE-fold, and ZNE-unoppt values/data."""
+    # Initialize accumulators for results across trials
+    ideal_values = []
+    unmit_values = []
+    zne_fold_values = []
+    zne_unopt_values = []
+    folded_depths_list = []
+    unopt_depths_list = []
 
-    # Original circuit metrics.
     original_depth = qc.depth()
 
-    # Ideal (noiseless) expectation value:
-    ideal_value = np.around(execute_no_shot_noise(qc), decimals=1)
+    for trial in range(trials):
+        if verbose:
+            print(f"Trial {trial + 1}/{trials}")
 
-    # Unmitigated expectation value:
-    unmit_value = execute(circuit=qc, backend=backend, shots=shots, noise_model=noise_model)
+        # Ideal (noiseless) expectation value:
+        ideal_value = np.around(execute_no_shot_noise(qc), decimals=1)
+        ideal_values.append(ideal_value)
 
-    # ZNE + Fold:
-    folded_circuits = [fold_method(qc, s) for s in scale_factors_zne]
-    folded_values = [
-        execute(circuit=circ, backend=backend, shots=shots, noise_model=noise_model) for circ in folded_circuits
-    ]
-    folded_depths = [circ.depth() for circ in folded_circuits]
+        # Unmitigated expectation value:
+        unmit_value = execute(circuit=qc, backend=backend, shots=shots, noise_model=noise_model)
+        unmit_values.append(unmit_value)
 
-    factory = extrapolation_method(scale_factors_zne)
-    [factory.push({"scale_factor": s}, val) for s, val in zip(scale_factors_zne, folded_values)]
+        # ZNE + Fold:
+        folded_circuits = [fold_method(qc, s) for s in scale_factors_zne]
+        folded_values = [
+            execute(circuit=circ, backend=backend, shots=shots, noise_model=noise_model) for circ in folded_circuits
+        ]
+        folded_depths = [circ.depth() for circ in folded_circuits]
+        folded_depths_list.append(folded_depths)
 
-    zne_fold_value = factory.reduce()
+        factory = extrapolation_method(scale_factors_zne)
+        [factory.push({"scale_factor": s}, val) for s, val in zip(scale_factors_zne, folded_values)]
+        zne_fold_values.append(factory.reduce())
 
-    # ZNE + Unopt:
-    unoptimized_circuits = [elementary_recipe(qc, iterations=i) for i in iterations_unopt]
-    unoptimized_values = [
-        execute(circuit=c, backend=backend, shots=shots, noise_model=noise_model) for c in unoptimized_circuits
-    ]
-    unoptimized_depths = [circ.depth() for circ in unoptimized_circuits]
-    scale_factors_unopt = [depth / original_depth for depth in unoptimized_depths]
+        # ZNE + Unopt:
+        unoptimized_circuits = [elementary_recipe(qc, iterations=i) for i in iterations_unopt]
+        unoptimized_values = [
+            execute(circuit=c, backend=backend, shots=shots, noise_model=noise_model) for c in unoptimized_circuits
+        ]
+        unoptimized_depths = [circ.depth() for circ in unoptimized_circuits]
+        unopt_depths_list.append(unoptimized_depths)
 
-    factory = extrapolation_method(scale_factors_unopt)
-    [factory.push({"scale_factor": s}, val) for s, val in zip(scale_factors_unopt, unoptimized_values)]
+        scale_factors_unopt = [depth / original_depth for depth in unoptimized_depths]
+        factory = extrapolation_method(scale_factors_unopt)
+        [factory.push({"scale_factor": s}, val) for s, val in zip(scale_factors_unopt, unoptimized_values)]
+        zne_unopt_values.append(factory.reduce())
 
-    zne_unopt_value = factory.reduce()
+    # Average results across trials
+    avg_ideal_value = np.mean(ideal_values)
+    avg_unmit_value = np.mean(unmit_values)
+    avg_zne_fold_value = np.mean(zne_fold_values)
+    avg_zne_unopt_value = np.mean(zne_unopt_values)
 
-    # Diagnostic information:
-    unmit_error = abs(ideal_value - unmit_value)
-    zne_fold_error = abs(ideal_value - zne_fold_value)
-    zne_unopt_error = abs(ideal_value - zne_unopt_value)
+    # Calculate errors and improvements
+    avg_unmit_error = abs(avg_ideal_value - avg_unmit_value)
+    avg_zne_fold_error = abs(avg_ideal_value - avg_zne_fold_value)
+    avg_zne_unopt_error = abs(avg_ideal_value - avg_zne_unopt_value)
 
-    percent_improvement_unmit = ((unmit_error - zne_unopt_error) / zne_unopt_error) * 100
-    percent_improvement_zne_fold = ((zne_fold_error - zne_unopt_error) / zne_unopt_error) * 100
+    percent_improvement_unmit = ((avg_unmit_error - avg_zne_unopt_error) / avg_zne_unopt_error) * 100
+    percent_improvement_zne_fold = ((avg_zne_fold_error - avg_zne_unopt_error) / avg_zne_unopt_error) * 100
 
     if verbose:
-        print(f"Initial circuit:\n {qc}")
-        print(f"Original circuit depth: {original_depth}\n")
-
-        print(f"Ideal value: {ideal_value}\n")
-
-        print(f"Unmitigated expectation value: {unmit_value}")
-        print(f"Unmitigated estimation error: {unmit_error}\n")
-
-        print(f"Noise-scaled expectation values from {fold_method.__name__}: \n {folded_values}")
-        print(f"Folded circuit depths: {folded_depths}")
-
-        print(f"The {extrapolation_method.__name__} ZNE+fold is: {zne_fold_value}")
-
-        print(f"ZNE expectation value: {zne_fold_value}")
-        print(f"ZNE estimation error: {zne_fold_error}\n")
-
-        print(f"Noise-scaled expectation values from circuit unoptimization: \n {unoptimized_values}")
-        print(f"Unoptimized circuit depths: {unoptimized_depths}")
-
-        print(f"The {extrapolation_method.__name__} ZNE+unopt is {zne_unopt_value}\n")
-
+        print(f"Average ideal value: {avg_ideal_value}")
+        print(f"Average unmitigated expectation value: {avg_unmit_value}")
+        print(f"Average ZNE + fold value: {avg_zne_fold_value}")
+        print(f"Average ZNE + unopt value: {avg_zne_unopt_value}")
         print(f"ZNE/unopt improvement over unmitigated: {percent_improvement_unmit:.2f}%")
         print(f"ZNE/unopt improvement over ZNE/fold: {percent_improvement_zne_fold:.2f}%")
 
     return BenchResults(
-        ideal_value=ideal_value,
-        unmit_value=unmit_value,
-        unmit_error=unmit_error,
-        zne_fold_value=zne_fold_value,
-        zne_fold_error=zne_fold_error,
-        zne_unopt_value=zne_unopt_value,
-        zne_unopt_error=zne_unopt_error,
+        avg_ideal_value=avg_ideal_value,
+        avg_unmit_value=avg_unmit_value,
+        avg_unmit_error=avg_unmit_error,
+        avg_zne_fold_value=avg_zne_fold_value,
+        avg_zne_fold_error=avg_zne_fold_error,
+        avg_zne_unopt_value=avg_zne_unopt_value,
+        avg_zne_unopt_error=avg_zne_unopt_error,
         percent_improvement_unmit=percent_improvement_unmit,
         percent_improvement_zne_fold=percent_improvement_zne_fold,
         original_circuit_depth=original_depth,
-        zne_fold_circuit_depths=folded_depths,
-        zne_unopt_circuit_depths=unoptimized_depths,
+        avg_zne_fold_circuit_depths=np.mean(folded_depths_list, axis=0).tolist(),
+        avg_zne_unopt_circuit_depths=np.mean(unopt_depths_list, axis=0).tolist(),
     )

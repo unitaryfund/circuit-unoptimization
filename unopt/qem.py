@@ -11,10 +11,33 @@ from qiskit_aer.noise import NoiseModel
 def execute(
     circuit: QuantumCircuit,
     backend: Backend,
-    shots: float,
+    shots: int,
     noise_model: NoiseModel | None = None,
 ) -> float:
-    """Executor for a Qiskit circuit."""
+    """
+    Execute a Qiskit quantum circuit and calculate the expectation value of the Z operator
+    on the 0th qubit.
+
+    This function measures all qubits in the circuit, simulates the circuit on the specified
+    backend, and calculates the expectation value of the Z operator on the first qubit
+    based on the measurement outcomes.
+
+    Args:
+        circuit (QuantumCircuit): The quantum circuit to execute.
+        backend (Backend): The Qiskit backend to run the circuit on.
+        shots (int): The number of measurement shots to use.
+        noise_model (NoiseModel | None, optional): An optional noise model to simulate.
+            If provided, the circuit will be simulated with the specified noise model.
+
+    Returns:
+        float: The expectation value of the Z operator on the 0th qubit.
+
+    Notes:
+        - Qiskit follows little-endian ordering for qubits. The outcome bitstrings
+          are reversed during processing to ensure correct calculations.
+        - The function assumes that the input circuit does not already contain measurement
+          operations, as it adds measurement gates to all qubits in the circuit.
+    """
     circuit_with_measurement = circuit.copy()
     circuit_with_measurement.measure_all()
 

@@ -10,10 +10,12 @@ def plot_circuit_depths_from_results(results: BenchResults) -> None:
     Args:
         results: Instance of `BenchResults` returned by `bench`.
     """
+    avg_results = results.average_results  # Access the BenchAverageResults object
+
     plt.figure(figsize=(10, 6))
 
-    folded_depths = results.avg_zne_fold_circuit_depths
-    unopt_depths = results.avg_zne_unopt_circuit_depths
+    folded_depths = avg_results.avg_zne_fold_circuit_depths
+    unopt_depths = avg_results.avg_zne_unopt_circuit_depths
     scale_factors_zne = range(1, len(folded_depths) + 1)
     scale_factors_unopt = range(1, len(unopt_depths) + 1)
 
@@ -47,10 +49,12 @@ def plot_avg_circuit_depths(results: BenchResults) -> None:
     Args:
         results: Instance of `BenchResults` returned by `bench`.
     """
+    avg_results = results.average_results  # Access the BenchAverageResults object
+
     plt.figure(figsize=(10, 6))
 
-    folded_depths = results.avg_zne_fold_circuit_depths
-    unopt_depths = results.avg_zne_unopt_circuit_depths
+    folded_depths = avg_results.avg_zne_fold_circuit_depths
+    unopt_depths = avg_results.avg_zne_unopt_circuit_depths
     scale_factors_zne = range(1, len(folded_depths) + 1)
     scale_factors_unopt = range(1, len(unopt_depths) + 1)
 

@@ -43,11 +43,23 @@ def execute(
     return expectation
 
 
-def execute_no_shot_noise(qc: QuantumCircuit, noise_model: NoiseModel | None = None) -> float:
+def execute_no_shot_noise(
+    qc: QuantumCircuit, noise_model: NoiseModel | None = None, return_density_matrix: bool = False
+) -> tuple[float, np.ndarray | None]:
     """Executor that uses density matrix simulator to reduce all shot noise.
 
     Adapted from the `execute_with_noise` function from mitiq.
     https://github.com/unitaryfund/mitiq/blob/ee85edf48557c85c4f6d0b1e1d74d74fc882c9d4/mitiq/interface/mitiq_qiskit/qiskit_utils.py#L85
+
+    Args:
+        qc: The quantum circuit to execute.
+        noise_model: The noise model to apply, if any.
+        return_density_matrix: Whether to include the density matrix in the result.
+
+    Returns:
+        A tuple containing:
+        - The expectation value of the Z operator on qubit 0.
+        - The density matrix, or None if `return_density_matrix` is False.
     """
     qc = qc.copy()
     qc.save_density_matrix()
@@ -58,4 +70,8 @@ def execute_no_shot_noise(qc: QuantumCircuit, noise_model: NoiseModel | None = N
     job = backend.run(qc, optimization_level=0, noise_model=noise_model, shots=1, basis_gates=basis_gates)
 
     rho = np.asarray(job.result().data()["density_matrix"])
-    return float(rho[0, 0].real)
+    expectation_value = float(rho[0, 0].real)
+
+    if return_density_matrix:
+        return expectation_value, rho
+    return expectation_value, None

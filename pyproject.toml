@@ -17,7 +17,7 @@ ply = "^3.11"
 qiskit-aer = "^0.15.1"
 scikit-learn = "^1.6.0"
 pre-commit = "^4.0.1"
-notebook = "7.0.8"
+notebook = "7.3.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"

@@ -11,7 +11,7 @@ from qiskit_aer.noise import NoiseModel
 from mitiq import zne
 
 from unopt.noise import depolarizing_noise_model
-from unopt.recipe import elementary_recipe
+from unopt.recipe import unoptimize_circuit
 from unopt.qem import execute_no_shot_noise, execute
 
 
@@ -127,7 +127,7 @@ def bench(
         zne_fold_values.append(zne_fold_value)
 
         # ZNE + Unopt:
-        unoptimized_circuits = [elementary_recipe(qc, iterations=i) for i in iterations_unopt]
+        unoptimized_circuits = [unoptimize_circuit(qc, iterations=i) for i in iterations_unopt]
         unoptimized_values = [
             execute(circuit=c, backend=backend, shots=shots, noise_model=noise_model) for c in unoptimized_circuits
         ]

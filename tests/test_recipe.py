@@ -5,7 +5,7 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import Operator
 
 from unopt.circuit import generate_random_two_qubit_gate_circuit
-from unopt.recipe import decompose, elementary_recipe
+from unopt.recipe import decompose, unoptimize_circuit
 
 
 @pytest.mark.parametrize(
@@ -19,7 +19,7 @@ from unopt.recipe import decompose, elementary_recipe
         ("P_c", 2, lambda: generate_random_two_qubit_gate_circuit(6, 10), "basis"),
     ],
 )
-def test_elementary_recipe_unitary_equivalence(
+def test_unoptimize_circuit_unitary_equivalence(
     strategy: str, iterations: int, circuit_generator: QuantumCircuit, decomposition_method: str
 ) -> None:
     """Test that the full elementary recipe maintains unitary equivalence."""
@@ -29,7 +29,7 @@ def test_elementary_recipe_unitary_equivalence(
     # Apply the decomposition method explicitly during the recipe.
     sample_circuit = decompose(sample_circuit, method=decomposition_method)
 
-    processed_qc = elementary_recipe(sample_circuit, iterations=iterations, strategy=strategy)
+    processed_qc = unoptimize_circuit(sample_circuit, iterations=iterations, strategy=strategy)
     processed_unitary = Operator(processed_qc)
 
     assert original_unitary.equiv(processed_unitary), (

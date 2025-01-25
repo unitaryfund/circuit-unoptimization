@@ -17,7 +17,7 @@ from qiskit.transpiler.passes import (
 )
 
 
-def elementary_recipe(qc: QuantumCircuit, iterations: int = 1, strategy: str = "P_c") -> QuantumCircuit:
+def unoptimize_circuit(qc: QuantumCircuit, iterations: int = 1, strategy: str = "P_c") -> QuantumCircuit:
     """Apply the elementary recipe to a quantum circuit multiple times.
 
     Args:

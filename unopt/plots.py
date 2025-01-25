@@ -12,8 +12,8 @@ from scipy.stats import linregress
 from scipy.optimize import curve_fit
 
 from unopt.benchmark import BenchResults
-from unopt.recipe import elementary_recipe
-from unopt.quantum_volume import get_exact_hop, quadratic, hop
+from unopt.recipe import unoptimize_circuit
+from unopt.qv import get_exact_hop, quadratic, hop
 from unopt.noise import depolarizing_noise_model
 
 
@@ -97,9 +97,9 @@ def plot_avg_circuit_depths(results: BenchResults) -> None:
 
 def plot_quantum_volume(
     num_qubits: int,
-    seed: int = 10,
     unoptimization_strategy: str = "P_c",
     unoptimization_rounds: int = 35,
+    seed: int = 10,
     shots: int = 1_000_000,
 ) -> None:
     random.seed(seed)
@@ -118,7 +118,7 @@ def plot_quantum_volume(
 
     x, y = [], []
     for idx in range(unoptimization_rounds):
-        scaled = elementary_recipe(copy.deepcopy(qc), iterations=idx, strategy=unoptimization_strategy)
+        scaled = unoptimize_circuit(copy.deepcopy(qc), iterations=idx, strategy=unoptimization_strategy)
         scaled = transpile(scaled, basis_gates=["u3", "cx"], optimization_level=3)
         scaled_count = dict(scaled.count_ops())["u3"] + dict(scaled.count_ops())["cx"]
         scale_factor = scaled_count / float(init)
@@ -189,5 +189,4 @@ def plot_quantum_volume(
 if __name__ == "__main__":
     unoptmization_strategy = "P_c"
     num_qubits = 10
-    depth = 10
     plot_quantum_volume(num_qubits, unoptimization_strategy=unoptmization_strategy)

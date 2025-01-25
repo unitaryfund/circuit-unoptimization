@@ -1,7 +1,9 @@
 # circuit-unoptimization
 
-Implements the quantum circuit unoptimization elementary recipe from
-[arXiv:2311.03805](https://arxiv.org/pdf/2311.03805). Unoptimizing a circuit increases its depth and gate count, which
+Supplemental software for *"Digital Zero-Noise Extrapolation with Quantum Circuit Unoptimization"* ([arXiv:XXX]()).
+
+Implements the quantum circuit unoptimization elementary recipe from *"Quantum Circuit Unoptimization"*
+([arXiv:2311.03805](https://arxiv.org/pdf/2311.03805)). Unoptimizing a circuit increases its depth and gate count, which
 can lead to higher noise due to increased opportunities for errors. By deliberately adding gates that do not change the
 overall computation, we can amplify the noise without altering the circuit's functionality. This serves as an alternate
 method of noise-scaling for quantum error mitigation techniques like zero-noise extrapolation (ZNE).
@@ -25,7 +27,7 @@ To run the tests:
 poetry run pytest
 ```
 
-## Contributing
+## Linting/Formatting
 
 To guarantee that both linter and formatter run before each commit, please install the pre-commit hook with:
 

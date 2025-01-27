@@ -16,7 +16,7 @@ pylatexenc = "^2.10"
 ply = "^3.11"
 qiskit-aer = "^0.16.0"
 scikit-learn = "^1.6.1"
-pre-commit = "^4.0.1"
+pre-commit = "^4.1.0"
 notebook = "7.3.2"
 
 [tool.poetry.group.dev.dependencies]

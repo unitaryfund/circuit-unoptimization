@@ -34,3 +34,14 @@ To guarantee that both linter and formatter run before each commit, please insta
 ```sh
 poetry run pre-commit install
 ```
+
+## Plots
+
+To generate the plots used in the paper, they can be run and generated directly by:
+
+```sh
+python unopt/plot.py
+```
+
+Note that generating these files from scratch can take several minutes. The progress of the computations used for the
+plots are shown when the above is run.

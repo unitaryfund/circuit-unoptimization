@@ -84,21 +84,6 @@ def calc_confidence_level(z_value: float) -> float:
     return 0.5 * (1 + math.erf(z_value / 2**0.5))
 
 
-def quadratic(x: float, a: float, b: float, c: float) -> float:
-    """Evaluate a quadratic function of the form ax^2 + bx + c.
-
-    Args:
-        x: The input value.
-        a: The coefficient of the quadratic term (x^2).
-        b: The coefficient of the linear term (x).
-        c: The constant term.
-
-    Returns:
-        The result of the quadratic equation for the given x, a, b, and c.
-    """
-    return a * x**2 + b * x + c
-
-
 def get_exact_hop(qc: QuantumCircuit) -> tuple[float, dict[str, float]]:
     """Compute the exact heavy output probability (HOP) for a quantum circuit.
 

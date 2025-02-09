@@ -1,3 +1,5 @@
+"""Fixtures for the test suite."""
+
 import pytest
 from qiskit import QuantumCircuit
 

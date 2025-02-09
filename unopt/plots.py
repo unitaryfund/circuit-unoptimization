@@ -53,7 +53,7 @@ def plot_benchmark_circuit_depths_from_results(
         trials=trials,
         verbose=verbose,
     )
-    avg_results = results.average_results  # Access the BenchAverageResults object
+    avg_results = results.average_results
 
     plt.figure(figsize=(10, 6))
 
@@ -115,7 +115,7 @@ def plot_benchmark_avg_circuit_depths(
         trials=trials,
         verbose=verbose,
     )
-    avg_results = results.average_results  # Access the BenchAverageResults object
+    avg_results = results.average_results
 
     plt.figure(figsize=(10, 6))
 
@@ -156,7 +156,7 @@ def plot_quantum_volume(
     shots: int = 1_000_000,
 ) -> None:
     print(
-        f"Generating plots for QV for {num_qubits} qubits using {unoptimization_strategy} strategy for {unoptimization_rounds} rounds"
+        f"Generating plots for QV for {num_qubits} qubits using {unoptimization_strategy} strategy for {unoptimization_rounds} rounds."
     )
     random.seed(seed)
     np.random.seed(seed)
@@ -252,7 +252,7 @@ def plot_qaoa(
     shots: int = 1_000_000,
 ) -> None:
     print(
-        f"Generating plots for QAOA for {num_qubits} qubits using {unoptimization_strategy} strategy for {unoptimization_rounds} rounds"
+        f"Generating plots for QAOA for {num_qubits} qubits using {unoptimization_strategy} strategy for {unoptimization_rounds} rounds."
     )
     G = nx.random_regular_graph(3, num_qubits, seed=seed)
     p = 2

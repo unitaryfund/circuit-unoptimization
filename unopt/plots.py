@@ -1,39 +1,66 @@
 """Plots for diagonostics of circuit unoptimization."""
 
+from typing import Any, Callable
 import copy
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import random
 
+from mitiq import zne
+
 from qiskit_aer import AerSimulator
+from qiskit_aer.noise import NoiseModel
 from qiskit.circuit.library import QuantumVolume
-from qiskit import transpile
+from qiskit import QuantumCircuit, transpile
 from scipy.stats import linregress
 from scipy.optimize import curve_fit
 
-from unopt.benchmark import BenchResults
-from unopt.recipe import unoptimize_circuit
-from unopt.qv import get_exact_hop, hop
-from unopt.qaoa import create_qaoa_circuit, measure_sample_cuts, calculate_max_cut_cost
-from unopt.utils import quadratic
+from unopt.benchmark import bench
 from unopt.noise import depolarizing_noise_model
+from unopt.qaoa import create_qaoa_circuit, measure_sample_cuts, calculate_max_cut_cost
+from unopt.qv import get_exact_hop, hop
+from unopt.recipe import unoptimize_circuit
+from unopt.utils import quadratic
 
 
-def plot_circuit_depths_from_results(results: BenchResults) -> None:
+def plot_benchmark_circuit_depths_from_results(
+    qc: QuantumCircuit,
+    backend: Any = AerSimulator(),
+    noise_model: NoiseModel = depolarizing_noise_model(error=0.01),
+    shots: int = 10_000,
+    scale_factors_zne: list[float] = [1, 3, 5],
+    iterations_unopt: list[int] = [1, 2, 3],
+    fold_method: Callable = zne.scaling.fold_global,
+    extrapolation_method: Callable = zne.RichardsonFactory,
+    trials: int = 1,
+    verbose: bool = False,
+) -> None:
     """Plot circuit depths for ZNE+Fold vs ZNE+Unopt from `BenchResults`.
 
     Args:
         results: Instance of `BenchResults` returned by `bench`.
     """
+    results = bench(
+        qc=qc,
+        backend=backend,
+        noise_model=noise_model,
+        shots=shots,
+        scale_factors_zne=scale_factors_zne,
+        iterations_unopt=iterations_unopt,
+        fold_method=fold_method,
+        extrapolation_method=extrapolation_method,
+        trials=trials,
+        verbose=verbose,
+    )
     avg_results = results.average_results  # Access the BenchAverageResults object
 
     plt.figure(figsize=(10, 6))
 
     folded_depths = avg_results.avg_zne_fold_circuit_depths
     unopt_depths = avg_results.avg_zne_unopt_circuit_depths
-    scale_factors_zne = range(1, len(folded_depths) + 1)
-    scale_factors_unopt = range(1, len(unopt_depths) + 1)
+    scale_factors_zne = list(range(1, len(folded_depths) + 1))
+    scale_factors_unopt = list(range(1, len(unopt_depths) + 1))
 
     # Plot the depths
     plt.plot(
@@ -59,20 +86,43 @@ def plot_circuit_depths_from_results(results: BenchResults) -> None:
     plt.show()
 
 
-def plot_avg_circuit_depths(results: BenchResults) -> None:
+def plot_benchmark_avg_circuit_depths(
+    qc: QuantumCircuit,
+    backend: Any = AerSimulator(),
+    noise_model: NoiseModel = depolarizing_noise_model(error=0.01),
+    shots: int = 10_000,
+    scale_factors_zne: list[float] = [1, 3, 5],
+    iterations_unopt: list[int] = [1, 2, 3],
+    fold_method: Callable = zne.scaling.fold_global,
+    extrapolation_method: Callable = zne.RichardsonFactory,
+    trials: int = 1,
+    verbose: bool = False,
+) -> None:
     """Plot average circuit depths for ZNE+Fold vs ZNE+Unopt from `BenchResults`.
 
     Args:
         results: Instance of `BenchResults` returned by `bench`.
     """
+    results = bench(
+        qc=qc,
+        backend=backend,
+        noise_model=noise_model,
+        shots=shots,
+        scale_factors_zne=scale_factors_zne,
+        iterations_unopt=iterations_unopt,
+        fold_method=fold_method,
+        extrapolation_method=extrapolation_method,
+        trials=trials,
+        verbose=verbose,
+    )
     avg_results = results.average_results  # Access the BenchAverageResults object
 
     plt.figure(figsize=(10, 6))
 
     folded_depths = avg_results.avg_zne_fold_circuit_depths
     unopt_depths = avg_results.avg_zne_unopt_circuit_depths
-    scale_factors_zne = range(1, len(folded_depths) + 1)
-    scale_factors_unopt = range(1, len(unopt_depths) + 1)
+    scale_factors_zne = list(range(1, len(folded_depths) + 1))
+    scale_factors_unopt = list(range(1, len(unopt_depths) + 1))
 
     # Plot the averaged depths
     plt.plot(
@@ -105,6 +155,9 @@ def plot_quantum_volume(
     seed: int = 10,
     shots: int = 1_000_000,
 ) -> None:
+    print(
+        f"Generating plots for QV for {num_qubits} qubits using {unoptimization_strategy} strategy for {unoptimization_rounds} rounds"
+    )
     random.seed(seed)
     np.random.seed(seed)
 
@@ -198,6 +251,9 @@ def plot_qaoa(
     seed: int = 1,
     shots: int = 1_000_000,
 ) -> None:
+    print(
+        f"Generating plots for QAOA for {num_qubits} qubits using {unoptimization_strategy} strategy for {unoptimization_rounds} rounds"
+    )
     G = nx.random_regular_graph(3, num_qubits, seed=seed)
     p = 2
 

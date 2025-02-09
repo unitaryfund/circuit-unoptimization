@@ -1,3 +1,6 @@
+"""Utility functions."""
+
+
 def quadratic(x: float, a: float, b: float, c: float) -> float:
     """Evaluate a quadratic function of the form ax^2 + bx + c.
 

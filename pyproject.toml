@@ -21,7 +21,7 @@ notebook = "7.3.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
-ruff = "^0.9.4"
+ruff = "^0.9.7"
 mypy = "^1.14.1"
 pytest-mypy-plugins = "^3.2.0"
 

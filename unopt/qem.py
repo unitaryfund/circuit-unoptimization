@@ -6,6 +6,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 from qiskit.providers import Backend
 from qiskit_aer.noise import NoiseModel
+from qiskit_ibm_runtime import SamplerV2
 
 
 def execute(
@@ -50,8 +51,9 @@ def execute(
     )
 
     # Execute the circuit:
-    result = backend.run(compiled_circuit, noise_model=noise_model, shots=shots).result()
-    counts = result.get_counts()
+    sampler = SamplerV2(backend)
+    result = sampler.run([compiled_circuit], shots=shots).result()
+    counts = result[0].data.meas.get_counts()
 
     # Calculate expectation value of Z on qubit 0.
     total_counts = sum(counts.values())

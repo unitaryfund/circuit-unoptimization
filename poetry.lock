@@ -475,7 +475,7 @@ files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
 ]
-markers = {main = "platform_system == \"Windows\" or sys_platform == \"win32\"", dev = "sys_platform == \"win32\""}
+markers = {main = "sys_platform == \"win32\" or platform_system == \"Windows\"", dev = "sys_platform == \"win32\""}
 
 [[package]]
 name = "comm"
@@ -3038,22 +3038,22 @@ cffi = {version = "*", markers = "implementation_name == \"pypy\""}
 
 [[package]]
 name = "qiskit"
-version = "1.4.0"
+version = "1.4.1"
 description = "An open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "qiskit-1.4.0-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:9a6ac6f124f97d62f1843ce2aaf5a6c0311fd25c90a0d2b90a600e0fb2346732"},
-    {file = "qiskit-1.4.0-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:bf1dd1a2d9d5375dd712594dd7de2d9d3cae8cbb22c820a4c0f88b26c03a4a64"},
-    {file = "qiskit-1.4.0-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b563fefc4485cdd44338ad091311c2c72a7855d5c0d0bfdfc6cb35f9050ff800"},
-    {file = "qiskit-1.4.0-cp39-abi3-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:585b6a7d3001ee619af08816d59492840f5650ac831ae62e24877049605abfc5"},
-    {file = "qiskit-1.4.0-cp39-abi3-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:4b818df95c835d419ebcb64ca4cec924c17c9f56486b7d52e636c2f258d2083e"},
-    {file = "qiskit-1.4.0-cp39-abi3-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:b50295c80bffd21194837ee63dae3de0bbf1a432c3571e6e6bb6f8464fd1ee0c"},
-    {file = "qiskit-1.4.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a4efe9ee228c8601b6f0c6b9613d981ae9b0cce8161efc4deb8432800b143d40"},
-    {file = "qiskit-1.4.0-cp39-abi3-win32.whl", hash = "sha256:f47cdd3d4df71581fd9ccffe5c1cb3f10e3e2c3254f8cf0e963e192ed48633f9"},
-    {file = "qiskit-1.4.0-cp39-abi3-win_amd64.whl", hash = "sha256:9cd963e0b74983d8c1a6db5b64446bf57598d181a7ad85bd5e22911b5251303d"},
-    {file = "qiskit-1.4.0.tar.gz", hash = "sha256:c5dcdf171bbec743c90c9b9e9f94a422ec90fcbf908c904d54b6b91f562fad83"},
+    {file = "qiskit-1.4.1-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:b1a2a69eb3121c2f5aab83dfc250e42d966e878b9caef0a83ab29a89e0addca9"},
+    {file = "qiskit-1.4.1-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:8a1ac3dbae587d99defe5e448ac4671f226107802e53063b101230a4be8f59be"},
+    {file = "qiskit-1.4.1-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e0f6e7b15d30bcdcb01224978f5a4fb80260e0cd2829d9261c907aac579f040f"},
+    {file = "qiskit-1.4.1-cp39-abi3-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:806d636b711c7fbef4e13d023478a008fa09e4eaf0afa28878a5328d5aa23a3b"},
+    {file = "qiskit-1.4.1-cp39-abi3-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:50a929f012186b6d4a6a8cd0fed292d86dd36cc262b42062924f83a0e0dd82a2"},
+    {file = "qiskit-1.4.1-cp39-abi3-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:ab7209a0dab56c7e4e7f461d6ce168f1a2c552782501d7c544284caf299f406a"},
+    {file = "qiskit-1.4.1-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2ec79ed9557a7b5c2a6d38dda24bfc219326703fba50729ca3b71dc4936fee50"},
+    {file = "qiskit-1.4.1-cp39-abi3-win32.whl", hash = "sha256:971a2768736f9f7d329a91e5fd1a398d547a0554fd9acce27905c6f074736573"},
+    {file = "qiskit-1.4.1-cp39-abi3-win_amd64.whl", hash = "sha256:de589b81ad4b22b4f73474530aa3b465559922c9f50a8db39138c152ed632db3"},
+    {file = "qiskit-1.4.1.tar.gz", hash = "sha256:7e78dab09b40986ee0d5afca06c725173fabe8f3d4e7464d46b2bac5234f2e25"},
 ]
 
 [package.dependencies]
@@ -4157,4 +4157,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "53802716c29563de71f34deb1f341c290cfdce4df83269ad8b04b1e6de704ad4"
+content-hash = "3fa243a75f25fe2c33cefc7e316924956ff96446cd5cb98bb5f912d3f60fd4bf"

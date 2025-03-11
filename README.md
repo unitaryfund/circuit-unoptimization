@@ -1,6 +1,7 @@
 # circuit-unoptimization
 
-Supplemental software for *"Digital Zero-Noise Extrapolation with Quantum Circuit Unoptimization"* ([arXiv:XXX]()).
+Supplemental software for *"Digital Zero-Noise Extrapolation with Quantum Circuit Unoptimization"*
+([arXiv:2503.06341](https://arxiv.org/abs/2503.06341)).
 
 Implements the quantum circuit unoptimization elementary recipe from *"Quantum Circuit Unoptimization"*
 ([arXiv:2311.03805](https://arxiv.org/pdf/2311.03805)). Unoptimizing a circuit increases its depth and gate count, which

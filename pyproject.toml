@@ -14,15 +14,16 @@ jupyter = "^1.1.1"
 matplotlib = "^3.10.1"
 pylatexenc = "^2.10"
 ply = "^3.11"
-qiskit-aer = "^0.16.1"
+qiskit-aer = "^0.16.2"
 scikit-learn = "^1.6.1"
 pre-commit = "^4.1.0"
 notebook = "7.3.2"
+qiskit-ibm-runtime = "^0.36.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
-ruff = "^0.9.7"
-mypy = "^1.14.1"
+ruff = "^0.9.9"
+mypy = "^1.15.0"
 pytest-mypy-plugins = "^3.2.0"
 
 [tool.ruff]
